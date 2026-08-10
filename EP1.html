@@ -192,8 +192,8 @@ body{margin:0}
     function convertDriveUrl(url) {
       const value = String(url || "").trim();
 
-      if (!value || value.includes("https://drive.google.com/file/d/1o8Z6-cGKp3aeVkALyb-8PDKdmXPV7rI-/view")) {
-        return "";
+      if (!value) {
+    return "";
       }
 
       // รองรับลิงก์แบบ /file/d/VIDEO_ID/view
