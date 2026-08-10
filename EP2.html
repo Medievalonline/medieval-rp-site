@@ -82,6 +82,53 @@ body{margin:0}
 @media (max-width:640px){
   .mo-frame-inner{padding:20px 14px}
 }
+
+/* ===== Google Drive Video : 16:9 ===== */
+.mo-video{
+  max-width:900px;
+  margin:28px auto 0;
+}
+.mo-video-frame{
+  position:relative;
+  width:100%;
+  aspect-ratio:16 / 9;
+  overflow:hidden;
+  background:#080604;
+  border:3px solid var(--wood-light);
+  border-radius:10px;
+  outline:1px solid var(--gold-dim);
+  outline-offset:-6px;
+  box-shadow:var(--shadow);
+}
+.mo-video-frame iframe{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  border:0;
+  display:block;
+  background:#000;
+}
+.mo-video-title{
+  margin:0 0 10px;
+  text-align:center;
+  color:var(--gold-bright);
+  font-family:'Noto Serif Thai',serif;
+  font-size:1rem;
+  font-weight:600;
+}
+.mo-video-note{
+  margin:9px 0 0;
+  text-align:center;
+  color:var(--gold-dim);
+  font-size:.72rem;
+  line-height:1.6;
+}
+@media (max-width:640px){
+  .mo-video{margin-top:22px}
+  .mo-video-title{font-size:.9rem}
+}
+
 </style>
 </head>
 <body>
