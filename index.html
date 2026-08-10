@@ -61,13 +61,140 @@
     <main><div class="topbar"><button class="menu" id="menu" aria-label="เปิดเมนู">☰</button><span id="pageTitle">HOME</span></div><div class="content" id="content"></div></main>
   </div>
   <script>
-    const pages=[['home','HOME','HOME.html'],['about','ABOUT','ABOUT.html'],['rules','RULES','RULES.html'],['lore','SERVER LORE','SERVER LORE.html'],['ep1','เนื้อเรื่อง EP.1','EP1.html'],['ep2','เนื้อเรื่อง EP.2','EP2.html'],['ep3','เนื้อเรื่อง EP.3','EP3.html'],['guide','GUIDE','GUIDE.html'],['legend','เรื่องเล่า ตำนาน','เรื่องเล่า ตำนาน.html'],['roles','บทบาท','บทบาท.html'],['whitelist','Whitelist Registration','Whitelist Registration.html'],['gifting','GIFTING','GIFTING.html']];
+    /*
+ * ================================
+ * MENU / PAGE SETTINGS
+ * ================================
+ * enabled: true  = แสดงเมนูและเปิดหน้าได้
+ * enabled: false = ซ่อนเมนูและไม่อนุญาตให้เปิดหน้านั้น
+ *
+ * ในอนาคตเพิ่ม EP ใหม่ได้โดยเพิ่มรายการ เช่น:
+ * {id:'ep4', label:'เนื้อเรื่อง EP.4', file:'EP4.html', enabled:false}
+ */
+const pages=[
+  {id:'home',label:'HOME',file:'HOME.html',enabled:true},
+  {id:'about',label:'ABOUT',file:'ABOUT.html',enabled:true},
+  {id:'rules',label:'RULES',file:'RULES.html',enabled:true},
+  {id:'lore',label:'SERVER LORE',file:'SERVER LORE.html',enabled:true},
+
+  {id:'ep1',label:'เนื้อเรื่อง EP.1',file:'EP1.html',enabled:true},
+  {id:'ep2',label:'เนื้อเรื่อง EP.2',file:'EP2.html',enabled:false},
+  {id:'ep3',label:'เนื้อเรื่อง EP.3',file:'EP3.html',enabled:false},
+  {id:'ep4',label:'เนื้อเรื่อง EP.4',file:'EP4.html',enabled:false},
+
+  {id:'guide',label:'GUIDE',file:'GUIDE.html',enabled:true},
+  {id:'legend',label:'เรื่องเล่า ตำนาน',file:'เรื่องเล่า ตำนาน.html',enabled:true},
+  {id:'roles',label:'บทบาท',file:'บทบาท.html',enabled:true},
+
+  {id:'whitelist',label:'Whitelist Registration',file:'Whitelist Registration.html',enabled:false},
+  {id:'gifting',label:'GIFTING',file:'GIFTING.html',enabled:true}
+];
     const nav=document.getElementById('navigation'),content=document.getElementById('content'),title=document.getElementById('pageTitle');
-    const makeLink=([id,label])=>{const b=document.createElement('button');b.className='nav-link';b.dataset.id=id;b.textContent=label;b.onclick=()=>location.hash=id;return b};
-    [['home'],['about'],['rules'],['lore',['ep1','ep2','ep3']],['guide',['legend','roles']],['whitelist'],['gifting']].forEach(([id,children])=>{const parent=pages.find(p=>p[0]===id);if(!children){nav.append(makeLink(parent));return}const group=document.createElement('div');group.className='nav-group collapsed';const head=document.createElement('div');head.className='nav-group-head';head.append(makeLink(parent));const toggle=document.createElement('button');toggle.className='nav-toggle';toggle.textContent='⌄';toggle.setAttribute('aria-label','เปิด/ปิดหน้าย่อย');toggle.onclick=(e)=>{e.preventDefault();e.stopPropagation();group.classList.toggle('collapsed');};head.append(toggle);const sub=document.createElement('div');sub.className='sub-pages';children.forEach(child=>{const link=makeLink(pages.find(p=>p[0]===child));link.classList.add('sub');sub.append(link)});group.append(head,sub);nav.append(group)});
+
+    // ค้นหาหน้าจาก ID
+    const getPage=(id)=>pages.find(p=>p.id===id);
+
+    // สร้างปุ่มเมนูเฉพาะหน้าที่ enabled
+    const makeLink=(page)=>{
+      if(!page || !page.enabled) return null;
+      const b=document.createElement('button');
+      b.className='nav-link';
+      b.dataset.id=page.id;
+      b.textContent=page.label;
+      b.onclick=()=>location.hash=page.id;
+      return b;
+    };
+
+    // กำหนดโครงสร้างเมนู
+    const menuStructure=[
+      {id:'home'},
+      {id:'about'},
+      {id:'rules'},
+      {id:'lore',children:['ep1','ep2','ep3','ep4']},
+      {id:'guide',children:['legend','roles']},
+      {id:'whitelist'},
+      {id:'gifting'}
+    ];
+
+    // สร้างเมนูจากการตั้งค่า enabled
+    menuStructure.forEach(item=>{
+      const parent=getPage(item.id);
+      if(!parent || !parent.enabled) return;
+
+      if(!item.children){
+        const link=makeLink(parent);
+        if(link) nav.append(link);
+        return;
+      }
+
+      const enabledChildren=item.children
+        .map(getPage)
+        .filter(page=>page && page.enabled);
+
+      // ถ้าไม่มีหน้าย่อยที่เปิดอยู่ จะไม่สร้างกลุ่ม
+      if(enabledChildren.length===0) return;
+
+      const group=document.createElement('div');
+      group.className='nav-group collapsed';
+
+      const head=document.createElement('div');
+      head.className='nav-group-head';
+
+      const parentLink=makeLink(parent);
+      if(parentLink) head.append(parentLink);
+
+      const toggle=document.createElement('button');
+      toggle.className='nav-toggle';
+      toggle.textContent='⌄';
+      toggle.setAttribute('aria-label','เปิด/ปิดหน้าย่อย');
+      toggle.onclick=(e)=>{
+        e.preventDefault();
+        e.stopPropagation();
+        group.classList.toggle('collapsed');
+      };
+      head.append(toggle);
+
+      const sub=document.createElement('div');
+      sub.className='sub-pages';
+
+      enabledChildren.forEach(page=>{
+        const link=makeLink(page);
+        if(link){
+          link.classList.add('sub');
+          sub.append(link);
+        }
+      });
+
+      group.append(head,sub);
+      nav.append(group);
+    });
     function fitFrame(frame,scale){frame.addEventListener('load',()=>{try{frame.contentDocument.documentElement.style.zoom=scale}catch(e){}})}
-    function render(){const id=location.hash.slice(1)||'home',item=pages.find(x=>x[0]===id)||pages[0];title.textContent=item[1];document.querySelectorAll('.nav-link').forEach(x=>x.classList.toggle('active',x.dataset.id===item[0]));document.body.classList.remove('menu-open');
-      document.querySelectorAll('.nav-group').forEach(g=>{if(g.querySelector(`[data-id="${item[0]}"]`) && item[0]!==g.querySelector('.nav-group-head .nav-link').dataset.id)g.classList.remove('collapsed')});
+    function render(){
+      const requestedId=location.hash.slice(1)||'home';
+      let item=getPage(requestedId);
+
+      // ถ้าหน้านั้นถูกปิด หรือไม่มีอยู่จริง ให้กลับ HOME
+      if(!item || !item.enabled){
+        item=getPage('home');
+        if(location.hash !== '#home') history.replaceState(null,'','#home');
+      }
+
+      title.textContent=item.label;
+
+      document.querySelectorAll('.nav-link').forEach(x=>{
+        x.classList.toggle('active',x.dataset.id===item.id);
+      });
+
+      document.body.classList.remove('menu-open');
+
+      document.querySelectorAll('.nav-group').forEach(g=>{
+        const activeLink=g.querySelector(`[data-id="${item.id}"]`);
+        const headLink=g.querySelector('.nav-group-head .nav-link');
+
+        if(activeLink && headLink && item.id!==headLink.dataset.id){
+          g.classList.remove('collapsed');
+        }
+      });
       if(item[0]==='gifting'){
         const commonDesc='เมื่อซื้อแพ็กเกจนี้ คุณจะได้รับบัตรของขวัญ (Gift Card) ที่มีมูลค่าเท่ากับราคาของสถานะ Supporter รวมภาษีที่เกี่ยวข้อง บัตรของขวัญนี้ไม่ได้จำกัดการใช้งานเฉพาะสถานะ Supporter เท่านั้น แต่สามารถนำไปใช้ซื้อสินค้าหรือบริการใดก็ได้ในร้านค้าออนไลน์ของเรา ซึ่งช่วยให้คุณสามารถมอบสถานะดังกล่าวเป็นของขวัญให้เพื่อน หรือช่วยลดราคาสำหรับการซื้อสถานะที่มีราคาสูงกว่าได้หากคุณต้องการมอบสถานะ Supporter เป็นของขวัญ เพียงแค่ซื้อบัตรของขวัญที่มีมูลค่าตรงกับราคาของสถานะที่ต้องการมอบให้ หลังจากชำระเงินเสร็จสิ้น รหัสบัตรของขวัญจะถูกส่งไปยังอีเมลของคุณ ผู้รับสามารถนำรหัสนี้ไปกรอกในช่อง Coupon / Gift Card ระหว่างขั้นตอนการชำระเงินเมื่อซื้อสถานะ Supporter ได้โปรดทราบว่าการซื้อแพ็กเกจนี้ไม่ได้ทำให้คุณได้รับสิทธิ์เข้าถึงเซิร์ฟเวอร์ (Whitelist) และไม่ได้เพิ่มลำดับความสำคัญในการรอคิวเข้าเซิร์ฟเวอร์แต่อย่างใด แพ็กเกจนี้เป็นเพียงการสร้างรหัสบัตรของขวัญสำหรับใช้ในร้านค้าออนไลน์ของเราเท่านั้นรายได้ทั้งหมดจะถูกนำไปใช้พัฒนาเซิร์ฟเวอร์ต่อ เช่น การจัดหาสคริปต์ การจ้างนักพัฒนา การปรับปรุงระบบอย่างต่อเนื่อง และการสนับสนุนทีมงาน บัตรของขวัญไม่สามารถขอคืนเงินได้ หากมีการทำเรื่องขอคืนเงินผ่านธนาคารหรือผู้ให้บริการชำระเงิน (Chargeback) หลังจากซื้อบัตรของขวัญไปแล้ว เราขอสงวนสิทธิ์ในการระงับบัญชีของคุณจากการเป็นส่วนหนึ่งของชุมชนนี้';
         const gifts=[
@@ -94,7 +221,7 @@
         document.getElementById('tkModalClose').addEventListener('click',()=>tkOverlay.classList.remove('open'));
         tkOverlay.addEventListener('click',(e)=>{if(e.target===tkOverlay)tkOverlay.classList.remove('open');});
       }
-      else {content.innerHTML=`<iframe class="page-frame" title="${item[1]}" src="${item[2]}"></iframe>`;fitFrame(content.querySelector('.page-frame'),'.86')}
+      else {content.innerHTML=`<iframe class="page-frame" title="${item.label}" src="${item.file}"></iframe>`;fitFrame(content.querySelector('.page-frame'),'.86')}
     }window.addEventListener('hashchange',render);document.getElementById('menu').onclick=()=>document.body.classList.toggle('menu-open');render();
   </script>
 </body>
