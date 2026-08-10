@@ -72,23 +72,22 @@
  * {id:'ep4', label:'เนื้อเรื่อง EP.4', file:'EP4.html', enabled:false}
  */
 const pages=[
-  {id:'home',label:'HOME',file:'HOME.html',enabled:true},
-  {id:'about',label:'ABOUT',file:'ABOUT.html',enabled:true},
-  {id:'rules',label:'RULES',file:'RULES.html',enabled:true},
-  {id:'lore',label:'SERVER LORE',file:'SERVER LORE.html',enabled:true},
+      {id:'home',label:'HOME',file:'HOME.html',enabled:true},
+      {id:'about',label:'ABOUT',file:'ABOUT.html',enabled:true},
+      {id:'rules',label:'RULES',file:'RULES.html',enabled:true},
+      {id:'lore',label:'SERVER LORE',file:'SERVER LORE.html',enabled:true},
 
-  {id:'ep1',label:'เนื้อเรื่อง EP.1',file:'EP1.html',enabled:true},
-  {id:'ep2',label:'เนื้อเรื่อง EP.2',file:'EP2.html',enabled:false},
-  {id:'ep3',label:'เนื้อเรื่อง EP.3',file:'EP3.html',enabled:false},
-  {id:'ep4',label:'เนื้อเรื่อง EP.4',file:'EP4.html',enabled:false},
+      {id:'ep1',label:'เนื้อเรื่อง EP.1',file:'EP1.html',enabled:true},
+      {id:'ep2',label:'เนื้อเรื่อง EP.2',file:'EP2.html',enabled:false},
+      {id:'ep3',label:'เนื้อเรื่อง EP.3',file:'EP3.html',enabled:false},
+      {id:'ep4',label:'เนื้อเรื่อง EP.4',file:'EP4.html',enabled:false},
 
-  {id:'guide',label:'GUIDE',file:'GUIDE.html',enabled:true},
-  {id:'legend',label:'เรื่องเล่า ตำนาน',file:'เรื่องเล่า ตำนาน.html',enabled:true},
-  {id:'roles',label:'บทบาท',file:'บทบาท.html',enabled:true},
-
-  {id:'whitelist',label:'Whitelist Registration',file:'Whitelist Registration.html',enabled:false},
-  {id:'gifting',label:'GIFTING',file:'GIFTING.html',enabled:true}
-];
+      {id:'guide',label:'GUIDE',file:'GUIDE.html',enabled:true},
+      {id:'legend',label:'เรื่องเล่า ตำนาน',file:'เรื่องเล่า ตำนาน.html',enabled:true},
+      {id:'roles',label:'บทบาท',file:'บทบาท.html',enabled:true},
+      {id:'whitelist',label:'Whitelist Registration',file:'Whitelist Registration.html',enabled:false},
+      {id:'gifting',label:'GIFTING',file:'GIFTING.html',enabled:true}
+    ];
     const nav=document.getElementById('navigation'),content=document.getElementById('content'),title=document.getElementById('pageTitle');
 
     // ค้นหาหน้าจาก ID
@@ -173,54 +172,115 @@ const pages=[
       const requestedId=location.hash.slice(1)||'home';
       let item=getPage(requestedId);
 
-      // ถ้าหน้านั้นถูกปิด หรือไม่มีอยู่จริง ให้กลับ HOME
       if(!item || !item.enabled){
         item=getPage('home');
-        if(location.hash !== '#home') history.replaceState(null,'','#home');
+        if(location.hash!=='#home') history.replaceState(null,'','#home');
       }
 
       title.textContent=item.label;
-
       document.querySelectorAll('.nav-link').forEach(x=>{
         x.classList.toggle('active',x.dataset.id===item.id);
       });
-
       document.body.classList.remove('menu-open');
 
       document.querySelectorAll('.nav-group').forEach(g=>{
         const activeLink=g.querySelector(`[data-id="${item.id}"]`);
         const headLink=g.querySelector('.nav-group-head .nav-link');
-
         if(activeLink && headLink && item.id!==headLink.dataset.id){
           g.classList.remove('collapsed');
         }
       });
-      if(item[0]==='gifting'){
-        const commonDesc='เมื่อซื้อแพ็กเกจนี้ คุณจะได้รับบัตรของขวัญ (Gift Card) ที่มีมูลค่าเท่ากับราคาของสถานะ Supporter รวมภาษีที่เกี่ยวข้อง บัตรของขวัญนี้ไม่ได้จำกัดการใช้งานเฉพาะสถานะ Supporter เท่านั้น แต่สามารถนำไปใช้ซื้อสินค้าหรือบริการใดก็ได้ในร้านค้าออนไลน์ของเรา ซึ่งช่วยให้คุณสามารถมอบสถานะดังกล่าวเป็นของขวัญให้เพื่อน หรือช่วยลดราคาสำหรับการซื้อสถานะที่มีราคาสูงกว่าได้หากคุณต้องการมอบสถานะ Supporter เป็นของขวัญ เพียงแค่ซื้อบัตรของขวัญที่มีมูลค่าตรงกับราคาของสถานะที่ต้องการมอบให้ หลังจากชำระเงินเสร็จสิ้น รหัสบัตรของขวัญจะถูกส่งไปยังอีเมลของคุณ ผู้รับสามารถนำรหัสนี้ไปกรอกในช่อง Coupon / Gift Card ระหว่างขั้นตอนการชำระเงินเมื่อซื้อสถานะ Supporter ได้โปรดทราบว่าการซื้อแพ็กเกจนี้ไม่ได้ทำให้คุณได้รับสิทธิ์เข้าถึงเซิร์ฟเวอร์ (Whitelist) และไม่ได้เพิ่มลำดับความสำคัญในการรอคิวเข้าเซิร์ฟเวอร์แต่อย่างใด แพ็กเกจนี้เป็นเพียงการสร้างรหัสบัตรของขวัญสำหรับใช้ในร้านค้าออนไลน์ของเราเท่านั้นรายได้ทั้งหมดจะถูกนำไปใช้พัฒนาเซิร์ฟเวอร์ต่อ เช่น การจัดหาสคริปต์ การจ้างนักพัฒนา การปรับปรุงระบบอย่างต่อเนื่อง และการสนับสนุนทีมงาน บัตรของขวัญไม่สามารถขอคืนเงินได้ หากมีการทำเรื่องขอคืนเงินผ่านธนาคารหรือผู้ให้บริการชำระเงิน (Chargeback) หลังจากซื้อบัตรของขวัญไปแล้ว เราขอสงวนสิทธิ์ในการระงับบัญชีของคุณจากการเป็นส่วนหนึ่งของชุมชนนี้';
-        const gifts=[
-          {team:'Early Supporter',title:'Early Supporter',price:'20',status:'On Sale',statusBg:'#e0be6f',statusInk:'#241a0f',image:'https://i.postimg.cc/JzjSsnfw/New-Project-(6).png',coming:false,
-            description:'ผู้สนับสนุนช่วงแรกจะได้รับบทบาท Discord "Early Supporter" และสิทธิ์คิวลำดับความสำคัญระดับ Diamond เป็นเวลา 2 เดือนแพ็กเกจนี้จะไม่สามารถซื้อได้อีกหลังจากเซิร์ฟเวอร์เปิดให้บริการ**สิ่งนี้ไม่ได้ให้สิทธิ์ WHITELIST เพื่อเข้าเซิร์ฟเวอร์** - จะเป็นเพียงการเพิ่มลำดับความสำคัญในคิวของคุณ และมอบบทบาทใน Discord เท่านั้นรายได้ทั้งหมดจะถูกนำกลับไปลงทุนในเซิร์ฟเวอร์ ได้แก่ การสนับสนุนสคริปต์ การว่าจ้างนักพัฒนา การปรับปรุงอย่างต่อเนื่อง และการสนับสนุนทีมงานหากมีการขอคืนเงิน สิทธิ์ลำดับความสำคัญในคิวจะถูกยกเลิกหากคุณดำเนินการเรียกเงินคืนผ่านผู้ให้บริการชำระเงิน (chargeback) เราขอสงวนสิทธิ์ในการแบนคุณออกจากชุมชน'},
-          {team:'Iron Gift',title:'Iron Gift',price:'0',status:'Coming Soon',statusBg:'#E4E1D8',statusInk:'#241a0f',image:'https://img1.pic.in.th/images/1158b637a565d663b.png',coming:true,description:commonDesc},
-          {team:'Silver Gift',title:'Silver Gift',price:'0',status:'Coming Soon',statusBg:'#E4E1D8',statusInk:'#241a0f',image:'https://img2.pic.in.th/2b28386f7faecbfe0.png',coming:true,description:commonDesc},
-          {team:'Gold Gift',title:'Gold Gift',price:'0',status:'Coming Soon',statusBg:'#E4E1D8',statusInk:'#241a0f',image:'https://img2.pic.in.th/39ad6501a5825059b.png',coming:true,description:commonDesc},
-          {team:'Platinum Gift',title:'Platinum Gift',price:'0',status:'Coming Soon',statusBg:'#E4E1D8',statusInk:'#241a0f',image:'https://img1.pic.in.th/images/4a75496ac5c40f503.png',coming:true,description:commonDesc},
-          {team:'Diamond Gift',title:'Diamond Gift',price:'0',status:'Coming Soon',statusBg:'#E4E1D8',statusInk:'#241a0f',image:'https://img2.pic.in.th/50aa6f1c8f193fddd.png',coming:true,description:commonDesc}
-        ];
-        content.innerHTML=`<section class="gift-page"><header class="gift-head"><h1>GIFTING</h1><small>MEDIEVAL ONLINE RP · THAILAND</small><div class="gift-info"><h2>Medieval Online Thai</h2><p>การสนับสนุนเซิร์ฟเวอร์ช่วยให้เราพัฒนาเนื้อหา ระบบ และชุมชนให้ดียิ่งขึ้น สินค้าเป็นดิจิทัล จึงไม่สามารถขอคืนเงินได้ หากมีข้อสงสัย โปรดติดต่อทีมงานผ่าน Discord</p><a class="gift-discord" href="https://discord.gg/BXHrfDTGvV" target="_blank" rel="noopener">เข้าร่วม Discord</a></div></header><h2 class="ticket-title">GIFT TICKETS</h2><div class="tk-grid">${gifts.map((g,i)=>`<div class="tk-card ${g.coming?'coming':''}"><span class="tk-gem tl"></span><span class="tk-gem tr"></span><span class="tk-gem bl"></span><span class="tk-gem br"></span><div class="tk-media"><div class="tk-media-inner"><img src="${g.image}" alt="${g.title}" onerror="this.src='https://placehold.co/400x300/2b2015/e0be6f?text=Gift'"></div><span class="tk-status" style="background:linear-gradient(180deg,${g.statusBg},#8a6520);color:${g.statusInk}">${g.status}</span></div><div class="tk-tear"></div><div class="tk-body"><div class="tk-team-row"><div class="tk-badge">${g.team.trim().charAt(0).toUpperCase()}</div><div class="tk-team">${g.team}</div></div><div class="tk-title">${g.title}</div><div class="tk-price"><span class="cur">$</span>${g.price}</div><div class="tk-actions">${g.coming?`<span class="tk-buy" aria-disabled="true">BUY</span>`:`<a class="tk-buy" href="https://medieval-rp-thai.tebex.store" target="_blank" rel="noopener">BUY<svg viewBox="0 0 24 24" width="10" height="10" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></a>`}<button class="tk-outline" data-idx="${i}">ดูรายละเอียด</button></div></div></div>`).join('')}</div></section><div class="tk-overlay" id="tkOverlay"><div class="tk-modal-frame"><span class="tk-gem tl"></span><span class="tk-gem tr"></span><span class="tk-gem bl"></span><span class="tk-gem br"></span><div class="tk-modal"><div class="tk-modal-eyebrow" id="tkModalTeam"></div><h2 id="tkModalTitle"></h2><span class="tk-price" id="tkModalPrice"></span><p class="tk-desc" id="tkModalDesc"></p><button class="tk-outline" id="tkModalClose">ปิด</button></div></div></div>`;
-        const tkOverlay=document.getElementById('tkOverlay');
-        content.querySelectorAll('.tk-outline[data-idx]').forEach(btn=>{
-          btn.addEventListener('click',()=>{
-            const g=gifts[+btn.dataset.idx];
-            document.getElementById('tkModalTeam').textContent=g.team;
-            document.getElementById('tkModalTitle').textContent=g.title;
-            document.getElementById('tkModalPrice').innerHTML='<span class="cur">$</span>'+g.price;
-            document.getElementById('tkModalDesc').textContent=g.description;
-            tkOverlay.classList.add('open');
-          });
-        });
-        document.getElementById('tkModalClose').addEventListener('click',()=>tkOverlay.classList.remove('open'));
-        tkOverlay.addEventListener('click',(e)=>{if(e.target===tkOverlay)tkOverlay.classList.remove('open');});
+
+      if(item.id==='ep1' || item.id==='ep2' || item.id==='ep3' || item.id==='ep4'){
+        const epData={
+          ep1:{
+            roman:'EPISODE I',
+            title:'เนื้อเรื่อง EP.1',
+            subtitle:'จุดเริ่มต้นแห่งอาณาจักร Medieval Online RP',
+            videoId:'VIDEO_ID_EP1',
+            heading:'บทนำ',
+            paragraphs:[
+              'ใส่เนื้อเรื่องของ EP.1 ตรงส่วนนี้ได้เลย โดยสามารถเพิ่มย่อหน้า รายละเอียด เหตุการณ์ และข้อมูลของตอนตามต้องการ',
+              'ส่วนนี้เป็นพื้นที่สำหรับเนื้อเรื่องของคุณ สามารถแก้ไขข้อความได้โดยไม่กระทบกับระบบวิดีโอหรือเมนูนำทาง'
+            ],
+            quote:'ทุกตำนาน ล้วนเริ่มต้นจากคนธรรมดา... และทุกอาณาจักร ล้วนมีราคาที่ต้องจ่าย'
+          },
+          ep2:{
+            roman:'EPISODE II',
+            title:'เนื้อเรื่อง EP.2',
+            subtitle:'เรื่องราวบทต่อไปของอาณาจักร',
+            videoId:'VIDEO_ID_EP2',
+            heading:'บทนำ',
+            paragraphs:[
+              'พื้นที่เนื้อเรื่อง EP.2 พร้อมใช้งาน เมื่อเปิด enabled ของ EP.2 เป็น true',
+              'นำเนื้อเรื่องของตอนที่ 2 มาใส่ในส่วนนี้ได้ตามต้องการ'
+            ],
+            quote:'เรื่องราวยังคงดำเนินต่อไป และทุกการตัดสินใจจะเปลี่ยนแปลงอนาคต'
+          },
+          ep3:{
+            roman:'EPISODE III',
+            title:'เนื้อเรื่อง EP.3',
+            subtitle:'ตำนานบทใหม่ที่กำลังจะถูกจารึก',
+            videoId:'VIDEO_ID_EP3',
+            heading:'บทนำ',
+            paragraphs:[
+              'พื้นที่เนื้อเรื่อง EP.3 พร้อมใช้งาน เมื่อเปิด enabled ของ EP.3 เป็น true',
+              'นำเนื้อเรื่องของตอนที่ 3 มาใส่ในส่วนนี้ได้ตามต้องการ'
+            ],
+            quote:'เมื่อประวัติศาสตร์ถูกเขียนขึ้นใหม่ ผู้ที่อยู่ในเหตุการณ์เท่านั้นที่จะรู้ความจริง'
+          },
+          ep4:{
+            roman:'EPISODE IV',
+            title:'เนื้อเรื่อง EP.4',
+            subtitle:'บทใหม่ของเรื่องราว',
+            videoId:'VIDEO_ID_EP4',
+            heading:'บทนำ',
+            paragraphs:[
+              'EP.4 เตรียมไว้ให้แล้ว แต่ยังปิดอยู่ตามค่า enabled:false',
+              'เมื่อพร้อม เพียงเปลี่ยน enabled ของ ep4 เป็น true และใส่ VIDEO_ID_EP4'
+            ],
+            quote:'ตำนานบทใหม่กำลังรอวันที่จะถูกเปิดเผย'
+          }
+        };
+
+        const ep=epData[item.id];
+        const videoSrc=ep.videoId.startsWith('http')
+          ? ep.videoId
+          : `https://drive.google.com/file/d/${ep.videoId}/preview`;
+
+        content.innerHTML=`
+          <section class="episode-page">
+            <div class="episode-wrap">
+              <header class="episode-head">
+                <div class="episode-kicker">MEDIEVAL ONLINE RP · THAILAND</div>
+                <h1>${ep.roman}</h1>
+                <p>${ep.subtitle}</p>
+              </header>
+
+              <div class="episode-video-card">
+                <div class="episode-video-frame">
+                  <iframe
+                    src="${videoSrc}"
+                    title="${ep.title} Video"
+                    allow="autoplay; fullscreen; picture-in-picture"
+                    allowfullscreen>
+                  </iframe>
+                </div>
+                <div class="episode-video-note">
+                  วิดีโอจาก Google Drive · อัตราส่วน 16:9 · รองรับคอมพิวเตอร์และโทรศัพท์มือถือ
+                </div>
+              </div>
+
+              <article class="episode-story">
+                <h2>${ep.heading}</h2>
+                ${ep.paragraphs.map(p=>`<p>${p}</p>`).join('')}
+                <div class="episode-quote">"${ep.quote}"</div>
+              </article>
+            </div>
+          </section>`;
+        return;
       }
+
       else {content.innerHTML=`<iframe class="page-frame" title="${item.label}" src="${item.file}"></iframe>`;fitFrame(content.querySelector('.page-frame'),'.86')}
     }window.addEventListener('hashchange',render);document.getElementById('menu').onclick=()=>document.body.classList.toggle('menu-open');render();
   </script>
