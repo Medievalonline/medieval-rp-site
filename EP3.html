@@ -133,7 +133,7 @@ body{margin:0}
 </head>
 <body>
 <div class="mo-wrap">
-  <h1 class="mo-page-title">เนื้อเรื่อง EP 3<small>Medieval Online RP &middot; Thailand</small></h1>
+  <h1 class="mo-page-title">เนื้อเรื่อง EP 2<small>Medieval Online RP &middot; Thailand</small></h1>
   <div class="mo-hero"><img src="https://lh3.googleusercontent.com/sitesv/AG8ngQV_44JWha854yPxSe1CtjnEwtGj9bRfj5nhSlhlKLiLD3KeXUTzN9FJlW8UnbT2WYi8j_itAyA28ci3amh6QtbUBMoN0Dl3wRmn6NGs8bA0wUAMYtkfrO1nhNKKHdif5e_OFAM2SsGdZxOs4-8KONLIFMPP_rt2wcwhkpy0_b27rEOl2BYYSYn-BDFsDmi4pBkuEzOj6-RL7-coDvjbfGY4612gOMAAoasYGQqe=w1280" alt=""></div>
   <div class="mo-frame">
     <div class="mo-frame-inner">
@@ -162,79 +162,23 @@ body{margin:0}
     </div>
   </div>
 
-  <!-- ===== VIDEO EP.3 : วางลิงก์ Google Drive ตรงนี้ ===== -->
+  <!-- ===== VIDEO EP.3 : Google Drive /preview ===== -->
   <section class="mo-video" aria-label="วิดีโอเนื้อเรื่อง EP.3">
     <h2 class="mo-video-title">วิดีโอเนื้อเรื่อง EP.3</h2>
     <div class="mo-video-frame">
       <iframe
         id="driveVideo"
         title="วิดีโอเนื้อเรื่อง EP.3"
+        src="https://drive.google.com/file/d/1I3wVdlAhK7yrocSsYJnfNAGxjKr4wW7k/preview"
         allow="autoplay; fullscreen; picture-in-picture"
+        referrerpolicy="strict-origin-when-cross-origin"
         allowfullscreen>
       </iframe>
     </div>
-    <div class="mo-video-note">วิดีโอ Google Drive · อัตราส่วน 16:9</div>
+    <div class="mo-video-note">Medieval Online RP · Thailand</div>
   </section>
 
-  <script>
-    /*
-      วิธีใส่วิดีโอ:
-      1) อัปโหลดวิดีโอเข้า Google Drive
-      2) ตั้งค่า "ทุกคนที่มีลิงก์" เป็น Viewer
-      3) นำลิงก์ Google Drive มาใส่ในตัวแปรด้านล่าง
-      ตัวอย่าง:
-      https://drive.google.com/file/d/VIDEO_ID/view
-    */
-    const GOOGLE_DRIVE_VIDEO_URL = "https://drive.google.com/file/d/1I3wVdlAhK7yrocSsYJnfNAGxjKr4wW7k/view?usp=drive_link";
 
-    const iframe = document.getElementById("driveVideo");
-
-    function convertDriveUrl(url) {
-      const value = String(url || "").trim();
-
-      if (!value || value.includes("ใส่ลิงก์ Google Drive")) {
-        return "";
-      }
-
-      // รองรับลิงก์แบบ /file/d/VIDEO_ID/view
-      const match = value.match(/drive\.google\.com\/file\/d\/([^/]+)/i);
-      if (match) {
-        return "https://drive.google.com/file/d/" + match[1] + "/preview";
-      }
-
-      // ถ้าใส่ preview URL มาอยู่แล้ว
-      if (value.includes("drive.google.com") && value.includes("/preview")) {
-        return value;
-      }
-
-      // รองรับการใส่ ID อย่างเดียว
-      if (!value.includes("/") && !value.includes(" ")) {
-        return "https://drive.google.com/file/d/" + value + "/preview";
-      }
-
-      return value;
-    }
-
-    const videoUrl = convertDriveUrl(GOOGLE_DRIVE_VIDEO_URL);
-
-    if (videoUrl) {
-      iframe.src = videoUrl;
-    } else {
-      iframe.srcdoc = `
-        <style>
-          *{box-sizing:border-box}
-          html,body{margin:0;width:100%;height:100%;background:#080604}
-          body{display:flex;align-items:center;justify-content:center;padding:20px;text-align:center;font-family:Arial,sans-serif;color:#c9a35c}
-          div{max-width:620px;line-height:1.7}
-          strong{display:block;color:#e8c983;font-size:18px;margin-bottom:8px}
-        </style>
-        <div>
-          <strong>ยังไม่ได้ใส่ลิงก์วิดีโอ</strong>
-          ใส่ลิงก์ Google Drive ของ EP.3 ในตัวแปร<br>
-          <code>GOOGLE_DRIVE_VIDEO_URL</code>
-        </div>`;
-    }
-  </script>
 </div>
 </body>
 </html>
